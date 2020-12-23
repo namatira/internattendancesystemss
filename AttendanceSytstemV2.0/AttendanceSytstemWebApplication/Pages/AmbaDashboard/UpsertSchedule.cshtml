@@ -1,0 +1,61 @@
+﻿@page
+@model AttendanceSytstemWebApplication.Pages.AmbaDashboard.UpsertScheduleModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = Model.Schedule.Id != 0 ? "EditSchedule" : "CreateSchedule";
+    Layout = "~/Pages/Shared/_AmbassadorLayout.cshtml";
+}
+<div class="container col-12 border shadow p-3 mt-5 ">
+    <h2 class="m-1">@(Model.Schedule.Id!=0? "Edit" : "Create New") Schedule</h2>
+    <div class="border container p-3 mt-4" style="padding:30px;">
+        <form method="post">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+            <div class="form-group row">
+                @if (Model.Schedule.Id != 0)
+                {
+                    <input type="hidden" asp-for="Schedule.Id" />
+                }
+
+                <input type="hidden" asp-for="Schedule.UserId" value="@HttpContext.User.Claims.FirstOrDefault(c => c.Type == "User_ID").Value" />
+                <div class="col-3">
+                    <label asp-for="Schedule.Date"></label>
+                </div>
+                <div class="col-6">
+                    <input asp-for="Schedule.Date" class="form-control" />
+                    <span asp-validation-for="Schedule.Date" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="Schedule.StartTime"></label>
+                </div>
+                <div class="col-6">
+                    <input asp-for="Schedule.StartTime" class="form-control" />
+                    <span asp-validation-for="Schedule.StartTime" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="Schedule.EndTime"></label>
+                </div>
+                <div class="col-6">
+                    <input asp-for="Schedule.EndTime" class="form-control" />
+                    <span asp-validation-for="Schedule.EndTime" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3 offset-3">
+                    <button type="submit" class="btn btn-primary form-control">@(Model.Schedule.Id != 0 ? "Update" : "Create")</button>
+                </div>
+                <div class="col-3">
+                    <a asp-page="Schedule" class="btn btn-success form-control">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+    @section Scripts{
+        <partial name="_ValidationScriptsPartial" />
+    }

@@ -1,0 +1,40 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<br />
+<br />
+<div class="border-0 container col-5 align-content-center shadow rounded" style="padding: 25px; min-width:400px">
+    <form method="post" class="d-flex justify-content-center" style="margin: 10px 0px;">
+        <div class="form-group col-12">
+            <div class="text-center mb-5">
+                <img src="~/Photo/apu_logo.jpg" class="img-fluid" style="max-width: 50%" alt="APU Logo" />
+            </div>
+            <div class="text-center">
+                <h1 class="display-5" style="margin-bottom: 40px;">Login</h1>
+            </div>
+            <div class="col-12">
+                <label asp-for="User.Username"></label>
+            </div>
+            <div class="col-12">
+                <input asp-for="User.Username" class="form-control" type="text" placeholder="TP Number" />
+            </div>
+            <div class="col-12 pt-3">
+                <label asp-for="User.Password"></label>
+            </div>
+            <div class="col-12">
+                <input asp-for="User.Password" class="form-control" type="password" placeholder="Password" />
+            </div>
+            <div class="text-danger" asp-validation-summary="All"></div>
+            <div class="col-12 pt-4">
+                <input asp-page="Index" type="submit" value="Login" class="btn btn-primary form-control" />
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+

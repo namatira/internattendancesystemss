@@ -1,0 +1,38 @@
+﻿@page
+@model AttendanceSytstemWebApplication.Pages.AmbaDashboard.ScheduleModel
+@{
+    ViewData["Title"] = "Schedule";
+    Layout = "~/Pages/Shared/_AmbassadorLayout.cshtml";
+}
+
+<div class="container col-12 border-0 shadow p-3 mt-5" style="background-color: #e9f4f5">
+    <h2 class="m-2 mb-4">Time Schedule</h2>
+    <form>
+        @if (Model.Schedules.Count() > 0)
+        {
+            @foreach (var item in Model.Schedules)
+            {
+                <div class="col-12 border shadow p-3 m-1 rounded justify-content-center"  style="background-color: #f5f9fa">
+                    <h5>@Html.DisplayFor(m => item.Date)</h5>
+                    <p class="h6">Time: @Html.DisplayFor(m => item.StartTime) To @Html.DisplayFor(m => item.EndTime)</p>
+                    <div class="d-flex justify-content-end">
+                        <a href="UpsertSchedule?id=@Html.DisplayFor(m => item.Id)" class="btn btn-success form-control text-white mr-1 d-flex col-2 justify-content-center" style="cursor: pointer">Edit</a>
+                        <a class="btn btn-danger form-control text-white d-flex col-2 justify-content-center" style="cursor: pointer" onclick="Delete('/api/Schedule?id='+@Html.DisplayFor(m => item.Id))">Delete</a>
+                    </div>
+                </div>
+                <br/>
+            }
+
+        }
+        else
+        {
+            <p class="p-3 m-1">No Schedule Record</p>
+        }
+        <a asp-page="UpsertSchedule" class="btn btn-info form-control text-white">New Schedule</a>
+    </form>
+
+</div>
+
+@section Scripts{
+    <script src="~/js/ambaSchedule.js"></script>
+}

@@ -1,0 +1,116 @@
+﻿@page
+@model AttendanceSytstemWebApplication.Pages.AmbaDashboard.NewAttendanceModel
+@{
+    ViewData["Title"] = "New Attendance";
+    Layout = "~/Pages/Shared/_AmbassadorLayout.cshtml";
+
+}
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError)
+        }
+        else { x.innerHTML = "Geolocation is not supported by this browser."; }
+    }
+    function showPosition(position) {
+        var curLatitude = position.coords.latitude;
+        var curLongitude = position.coords.longitude;
+        if ($('form').valid() == true) {
+            if ((curLatitude >= 3.055 && curLatitude <= 3.0564) || (curLongitude >= 101.6989 && curLongitude <= 101.7009)) {
+                console.log(curLatitude, curLongitude);
+                swal({
+                    title: "Wrong Location",
+                    text: "You currently not in Office/within APU",
+                    icon: "error"
+                }).then((ok) => {
+                    location.reload()
+                });
+            }
+            else {
+                $.post('', $('form').serialize(), function () {
+                    swal({
+                        title: "Success",
+                        text: "Successfully Taken Attendance",
+                        icon: "success",
+                    }).then((ok) => {
+                        window.location = "/AmbaDashboard/Index";
+                    });
+                    call();
+                });
+            }
+
+        }
+
+    }
+    function showError(error) {
+        if (error.code == 1) {
+            x.innerHTML = "User denied the request for Geolocation."
+        }
+        else if (err.code == 2) {
+            x.innerHTML = "Location information is unavailable."
+        }
+        else if (err.code == 3) {
+            x.innerHTML = "The request to get user location timed out."
+        }
+        else {
+            x.innerHTML = "An unknown error occurred."
+        }
+    }
+</script>
+
+<div class="container col-12 border shadow p-3 mt-5 ">
+    <h2 class="m-1">New Attendance</h2>
+    <div class="border container p-3 mt-4" style="padding:30px;">
+        <form method="">
+            <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+            <div class="form-group row">
+                <input id="userName" type="hidden" value="@User.Identity.Name" />
+                <input id="userID" type="hidden" asp-for="Attendance.UserId" value="@HttpContext.User.Claims.FirstOrDefault(c => c.Type == "User_ID").Value" />
+                <div class="col-3">
+                    <label asp-for="Attendance.Date"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Attendance.Date" class="form-control" readonly/>
+                    <span asp-validation-for="Attendance.Date" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="Attendance.Time"></label>
+                </div>
+                <div class="col-8">
+                    <input id="time" asp-for="Attendance.Time" class="form-control" />
+                    <span asp-validation-for="Attendance.Time" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="Attendance.Status"></label>
+                </div>
+                <div class="col-8">
+                    <select id="Status_Select" asp-for="Attendance.Status" class="form-control">
+                        <option value="NULL" selected disabled>--- Select Status ---</option>
+                        <option value="1">In Time</option>
+                        <option value="2">Out Time</option>
+                    </select>
+                    <span asp-validation-for="Attendance.Status" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 offset-3">
+                    <button type="button" class="btn btn-primary form-control text-center" id="takeAttendance" onclick="getLocation()">Take Attendance</button>
+                </div>
+                <div class="col-4">
+                    <a asp-page="Index" class="btn btn-success form-control">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
+
